@@ -8,7 +8,7 @@ class Object:
     spn: tuple
 
 
-def get_object_size_and_cords(object_name):
+def get_object_size_and_cords(object_name, address_ll=None):
     search_api_server = "https://search-maps.yandex.ru/v1/"
     api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
 
@@ -16,6 +16,7 @@ def get_object_size_and_cords(object_name):
         "apikey": api_key,
         "text": object_name,
         "lang": "ru_RU",
+        'll': address_ll,
         "type": "biz"
     }
 

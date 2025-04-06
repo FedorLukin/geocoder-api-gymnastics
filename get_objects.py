@@ -26,10 +26,11 @@ def get_objects_data(object_name: str, address_ll: str = None, limit: int = 1) -
 
     for geoobject_data in json_response['features']:
         company_data = geoobject_data['properties'].get('CompanyMetaData')
-        if not company_data:
-            continue
-        schedule = 3 if not company_data['Hours'] else \
-            int(company_data['Hours']['Availabilities'][0].get('TwentyFourHours', 0))
+        if company_data:
+            schedule = 3 if not company_data['Hours'] else \
+                int(company_data['Hours']['Availabilities'][0].get('TwentyFourHours', 0))
+        else:
+            schedule = 3
         cords = ','.join(map(str, geoobject_data['geometry']['coordinates']))
         results.append(Object(workschedule=schedule, point=cords))
         if len(results) == limit:

@@ -2,18 +2,20 @@ import sys
 import requests
 from PIL import Image
 from io import BytesIO
-from get_object import get_object_size_and_cords
+from get_objects import get_objects_data
+
 
 toponym_to_find = " ".join(sys.argv[1:])
-object = get_object_size_and_cords(toponym_to_find)
-nearest_pharmacy = get_object_size_and_cords('Аптека', object.point)
+object = get_objects_data(toponym_to_find)[1][0]
+spn, pharmacies = get_objects_data('Аптека', object.point, limit=10)
 apikey = "f3a0fe3a-b07e-4840-a1da-06f18b2ddf13"
-
+points = '~'.join([f'{object.point},{('pm2blm', 'pm2gnm', 'pm2grm')[object.workschedule]}' for object in pharmacies])
+points += f'~{object.point},vkbkm'
 map_params = {
-    "ll": nearest_pharmacy.point,
-    "spn": nearest_pharmacy.spn,
+    "ll": object.point,
+    "spn": spn,
     "apikey": apikey,
-    "pt": f'{nearest_pharmacy.point},round'
+    "pt": points
 }
 
 map_api_server = "https://static-maps.yandex.ru/v1"
